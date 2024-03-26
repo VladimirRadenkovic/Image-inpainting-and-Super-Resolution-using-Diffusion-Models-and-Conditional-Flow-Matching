@@ -1,0 +1,1 @@
+This directory contains all configurations files for dynamical configuration generation via Hydra. A hierarchical configuration is dynamically generated from the configuration files via Hydra and OmegaConf.

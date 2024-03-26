@@ -1,0 +1,11 @@
+torch
+torchvision
+einops
+ml-collections
+scipy
+pandas
+tensorboardX
+plum-dispatch
+ema-pytorch
+torchmetrics[image]
+lpips

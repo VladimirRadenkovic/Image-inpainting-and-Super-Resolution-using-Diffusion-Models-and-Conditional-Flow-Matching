@@ -1,0 +1,71 @@
+# Task hyperparams
+task_name: "ec_reaction"
+
+## Task config
+task: 
+  _target_: src.data.datasets.ec_reaction.ECReactionTask
+  task_path: ${env.paths.project}/data/ec_reaction/
+
+## Background dataset configs
+# Precomputed PDB dataset
+pdb_dataset:
+  _target_: src.utils.disk_datasets.get_dataset
+  root: ${env.paths.data}/pdb/pdb_fixed.tar
+  suffix: mmtf
+  #read_mode: path
+
+## ML dataset configs
+# The processed `.pt` files for actual ML runs go here
+processed_dir: ${env.paths.data}/pdb/fixed
+
+# Dataset hyperparams
+num_classes: 384 # number of classes
+repr: "CA"
+dataset_fraction: 0.1
+shuffle_labels: False
+
+
+transforms:  
+  keep_fields:
+    _target_: src.transforms.pandas_transforms.KeepFields
+    fields_to_keep: ["id", "pdb", "chain", "label"]
+  load_mmtf: 
+    _target_: src.transforms.biotite_transforms.LoadMMTF
+    mmtf_dataset: ${dataset.pdb_dataset}
+    model: 1
+  filter_by_array_chain:
+    _target_: src.transforms.biotite_transforms.FilterByArrayChain
+  filter_canonical_amino_acids:
+    _target_: src.transforms.biotite_transforms.FilterCanonicalAminoAcids
+  filter_by_atom_name:
+    _target_: src.transforms.biotite_transforms.FilterByAtomName
+    allowed_atom_names: ["CA"]
+  convert_to_graph:
+    _target_: src.transforms.biotite_transforms.ConvertToGraph
+    drop_rest: True
+  knn_graph:
+    _target_: src.transforms.pyg_transforms.KnnGraph
+    k: 10
+    loop: False
+    #max_dist: 10.0
+    #dist_metric: "euclidean"
+  add_label:
+    _target_: src.transforms.pyg_transforms.AddLabel.from_df
+    df: ???  # NOTE: This is a reminder that df needs to be passed as parameter in the pipeline. 
+    shuffle_labels: False
+    seed: null
+
+pyg_dataset:
+  _target_: src.data.datasets.pyg_dataset.PyGDataset.from_dir
+  root: ${dataset.processed_dir}
+  ids: ??? # NOTE: This is a reminder that ids needs to be passed as parameter in the pipeline.
+  transform: ??? # NOTE: This is a reminder that transform needs to be passed as parameter in the pipeline.
+
+# Data loader hyperparams
+loader:
+  _target_: torch_geometric.loader.DataLoader
+  dataset: ??? # NOTE: This is a reminder that dataset needs to be passed as parameter in the pipeline.
+  shuffle: ??? # NOTE: This is a reminder that shuffle needs to be passed as parameter in the pipeline.
+  batch_size: 1
+  num_workers: 32
+  pin_memory: True

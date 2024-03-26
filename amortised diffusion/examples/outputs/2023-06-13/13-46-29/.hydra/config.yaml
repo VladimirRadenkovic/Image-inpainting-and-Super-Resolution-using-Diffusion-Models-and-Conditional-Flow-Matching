@@ -1,0 +1,8 @@
+name: calpha_diffusion
+seed: 52
+run_name: calpha_diffusion
+num_workers: 1
+se3_diffuser:
+  _target_: src.diffusion.se3_diffuser.SE3Diffuser
+  diffuse_trans: true
+  diffuse_rot: true

@@ -1,0 +1,21 @@
+# @package _global_
+
+# === 1. Set config parameters ===
+name: "test" # default name for the experiment
+seed: 52 # seed for random number generators in pytorch, numpy and python.random
+load_ckpt: False
+# === 2. Specify defaults here. Defaults will be overwritten by equivalently named options in this file ===
+defaults:
+  - optional env: default
+  - dataset: default
+  - diffusion: default
+  - model: gvp_denoiser_wo_selfloops
+  - logger: default
+  - callbacks: default
+  - optimizer: adam     # TODO: Add to training config
+  - trainer: default   # TODO: Update 
+  - sampling: default
+  # - sweeper: wandb
+  # - task: classification  # TODO: Potentially deprecate
+  
+  - _self_ # see: https://hydra.cc/docs/upgrades/1.0_to_1.1/default_composition_order/. Adding _self_ at bottom means values in this file override defaults.

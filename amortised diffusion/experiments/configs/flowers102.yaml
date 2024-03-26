@@ -1,0 +1,10 @@
+image_size: 64
+in_channels: 3
+out_channels: 3
+num_channels: 128
+num_res_blocks: 1
+resblock_updown: True
+num_head_channels: 64
+resblock_updown: True
+use_scale_shift_norm: True
+num_heads: 4

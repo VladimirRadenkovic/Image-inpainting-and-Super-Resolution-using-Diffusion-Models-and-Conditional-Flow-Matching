@@ -1,0 +1,12 @@
+_target_: src.models.gvp_gnn.GVPDenoiser
+n_steps: 10 #CHANGE TO BEING ADAPTABLE TO SCHEDULE
+max_protein_length: 112
+n_in_node_feats: [1,1]
+n_lookup_feats: 16
+n_in_edge_feats: [16, 1]
+n_h_node_feats: [256, 64]
+n_h_edge_feats: [256, 64]
+n_conv_layers: 5
+n_msg_layers: 3
+sin_temp_enc: False
+device: "cuda"
